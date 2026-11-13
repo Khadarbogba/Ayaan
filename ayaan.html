@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adiga Ayaan Kuu Hibeeyay ❤️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Tone.js for gentle romantic chimes (No external audio files) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        :root {
+            --rose-soft: #fff1f2;
+            --rose-primary: #e11d48;
+            --gold-accent: #d97706;
+            --cream-bg: #fffbf7;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cream-bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(254, 205, 211, 0.45) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(253, 230, 138, 0.35) 0px, transparent 50%),
+                radial-gradient(at 80% 10%, rgba(251, 113, 133, 0.2) 0px, transparent 40%);
+            color: #4c0519;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .font-serif-romantic {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Floating Hearts & Petals Background */
+        .floating-element {
+            position: fixed;
+            bottom: -50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp linear forwards;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.75;
+            }
+            85% {
+                opacity: 0.75;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Envelope Styling & Animation */
+        .envelope-wrapper {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            height: 220px;
+            background: linear-gradient(135deg, #fda4af 0%, #f43f5e 100%);
+            border-radius: 16px;
+            box-shadow: 0 20px 35px -10px rgba(225, 29, 72, 0.35);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .envelope:hover {
+            transform: translateY(-6px) scale(1.02);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 115px;
+            background: linear-gradient(180deg, #fb7185 0%, #e11d48 100%);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            z-index: 3;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 88px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 52px;
+            height: 52px;
+            background: radial-gradient(circle, #fbbf24 0%, #b45309 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(180, 83, 9, 0.5);
+            z-index: 4;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            border: 2px solid #fef3c7;
+        }
+
+        .envelope.open .wax-seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(0.5);
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(254, 205, 211, 0.8);
+            box-shadow: 0 15px 35px -5px rgba(159, 18, 57, 0.08);
+        }
+
+        /* Pulse Heart Animation */
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.18); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.12); }
+        }
+
+        .animate-heartbeat {
+            animation: heartBeat 2s infinite;
+        }
+
+        /* Card Flip / Fade Transition */
+        .reason-fade {
+            animation: fadeScale 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeScale {
+            0% { opacity: 0; transform: translateY(10px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Celebration Confetti Canvas */
+        #celebrationCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-rose-200 selection:text-rose-900">
+
+    <!-- Canvas for celebratory hearts & gold confetti -->
+    <canvas id="celebrationCanvas"></canvas>
+
+    <!-- Background Floating Hearts Container -->
+    <div id="floating-container" aria-hidden="true"></div>
+
+    <!-- Main Container -->
+    <main class="relative z-10 max-w-2xl mx-auto px-4 py-8 sm:py-12 flex flex-col items-center space-y-10">
+
+        <!-- Header / Hero Section -->
+        <header class="text-center space-y-3 mt-2">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100/80 border border-rose-200 text-rose-700 text-xs sm:text-sm font-medium shadow-sm">
+                <span>✨ Hadiyad Qaas Ah Oo Adiga Kuu Gaar Ah ✨</span>
+            </div>
+            <h1 class="font-serif-romantic text-4xl sm:text-5xl font-bold text-rose-950 tracking-tight leading-tight">
+                Khadar & <span class="text-rose-600 italic">Ayaan Qlpi</span>
+            </h1>
+            <p class="text-rose-800/80 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+                Boggan yar waxaan u sameeyay si aan kuu xasuusiyo inta aad ii qiimo badan tahay maalin kasta iyo saacad kasta.
+            </p>
+        </header>
+
+        <!-- Section 1: Interactive Love Letter Envelope -->
+        <section class="w-full flex flex-col items-center space-y-4">
+            <h2 class="font-serif-romantic text-xl sm:text-2xl font-semibold text-rose-900 flex items-center gap-2">
+                <span>💌</span> Farriin Qalbiga Ka Soo Go'day
+            </h2>
+            <p class="text-xs sm:text-sm text-rose-700/80 text-center">Taabo baqshadda hoose si aad u akhrido warqaddaada</p>
+
+            <div class="envelope-wrapper w-full flex justify-center py-2" onclick="openLoveLetter()">
+                <div id="envelopeBox" class="envelope flex flex-col items-center justify-end p-6 text-white">
+                    <div class="envelope-flap"></div>
+                    <div class="wax-seal">
+                        <span class="text-xl">❤️</span>
+                    </div>
+                    <div class="text-center z-2 mt-12">
+                        <p class="font-serif-romantic italic text-lg tracking-wide text-rose-50">Ku Socota Gacalisadayda Ayan</p>
+                        <p class="text-xs text-rose-100/90 mt-1">Riix si aad u furto ✨</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Interactive "Reasons Why I Love You" Deck -->
+        <section class="w-full glass-card rounded-3xl p-6 sm:p-8 text-center space-y-6">
+            <div class="space-y-1">
+                <span class="text-amber-600 text-xs font-semibold uppercase tracking-widest">Sababaha Aan Kuu Jeclahay</span>
+                <h2 class="font-serif-romantic text-2xl sm:text-3xl font-bold text-rose-950">Maxaan Kugu Doortay?</h2>
+            </div>
+
+            <!-- Reason Card Display -->
+            <div class="min-h-[150px] flex flex-col items-center justify-center bg-gradient-to-br from-rose-50 to-amber-50/60 border border-rose-200/80 rounded-2xl p-6 shadow-inner relative overflow-hidden">
+                <span id="reasonCounter" class="absolute top-3 right-4 text-xs font-medium text-rose-400">1 / 10</span>
+                <div id="reasonIcon" class="text-3xl mb-3 animate-heartbeat">🌹</div>
+                <p id="reasonText" class="font-serif-romantic text-lg sm:text-xl text-rose-900 italic leading-relaxed reason-fade">
+                    "Dhoolla-caddayntaadu waxay ii iftiimisaa maalinta ugu madow, waxayna qalbigayga gelisaa xasillooni aan la soo koobi karin."
+                </p>
+            </div>
+
+            <!-- Next Reason Button -->
+            <button onclick="nextReason()" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-medium shadow-lg shadow-rose-500/25 active:scale-95 transition-all flex items-center justify-center gap-2 mx-auto cursor-pointer">
+                <span>Sabab Kale Arag</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </section>
+
+        <!-- Section 3: Playful Romantic Question ("Ma i jeceshahay?") -->
+        <section id="questionSection" class="w-full glass-card rounded-3xl p-6 sm:p-8 text-center space-y-6 relative overflow-hidden">
+            <div class="space-y-2">
+                <div class="text-4xl animate-heartbeat">💍</div>
+                <h2 class="font-serif-romantic text-2xl sm:text-3xl font-bold text-rose-950">
+                    Su'aal Yar Oo Muhiim Ah...
+                </h2>
+                <p id="questionPrompt" class="text-base sm:text-lg text-rose-800 font-medium">
+                    Ma i jeceshahay, diyaarna ma u tahay inaan weligeen wada jirno? ❤️
+                </p>
+            </div>
+
+            <!-- Buttons Container -->
+            <div id="buttonsContainer" class="relative min-h-[110px] flex flex-wrap items-center justify-center gap-4 pt-2">
+                <!-- YES Button -->
+                <button id="yesBtn" onclick="handleYesClick()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-600 to-amber-500 text-white font-bold text-lg shadow-xl shadow-rose-500/30 hover:scale-105 active:scale-95 transition-all cursor-pointer z-20">
+                    Haa, Aad Baan Kuu Jeclahay! 💖
+                </button>
+
+                <!-- Playful Dodging NO Button -->
+                <button id="noBtn" onmouseenter="dodgeNoButton()" onclick="dodgeNoButton()" ontouchstart="dodgeNoButton(event)" class="px-6 py-3.5 rounded-2xl bg-rose-100 hover:bg-rose-200 text-rose-700 font-medium text-base border border-rose-300 transition-all duration-200 cursor-pointer z-10">
+                    Maya 🙈
+                </button>
+            </div>
+
+            <!-- Hidden Celebration Result Message -->
+            <div id="celebrationMessage" class="hidden space-y-4 py-4 reason-fade">
+                <div class="inline-block p-3 rounded-full bg-amber-100 text-amber-600 text-3xl shadow-sm">
+                    🥂✨❤️
+                </div>
+                <h3 class="font-serif-romantic text-2xl sm:text-3xl font-bold text-rose-600">
+                    Waan Ogaa Inaad Haa Dhihi Doonto!
+                </h3>
+                <p class="text-rose-900 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+                    Waxaad tahay qofka iigu farxadda badan adduunka. Ballan waxaan ku qaadayaa inaan ku jeclaado, ku xanaaneeyo, oo aan garabkaaga taagnaado weligay! 💕
+                </p>
+                <div class="pt-2">
+                    <button onclick="triggerCelebrationBurst()" class="px-5 py-2.5 rounded-xl bg-rose-100 text-rose-700 text-sm font-medium hover:bg-rose-200 transition cursor-pointer">
+                        🎉 Mar Kale U Dabaaldeg
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-xs text-rose-700/70 pb-6">
+            <p>Waxaa lagu sameeyay Jacayl aan dhammaad lahayn ❤️ Adiga Keliya</p>
+        </footer>
+    </main>
+
+    <!-- Love Letter Modal -->
+    <div id="letterModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-rose-950/60 backdrop-blur-sm transition-opacity">
+        <div class="bg-[#fffdf9] border-2 border-amber-200/80 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative reason-fade max-h-[90vh] overflow-y-auto">
+            <!-- Decorative Corner Flourish -->
+            <div class="flex justify-between items-center border-b border-rose-100 pb-4 mb-5">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🌹</span>
+                    <span class="font-serif-romantic font-bold text-lg text-rose-900">Warqad Jacayl</span>
+                </div>
+                <button onclick="closeLoveLetter()" class="w-9 h-9 rounded-full bg-rose-100 hover:bg-rose-200 text-rose-700 flex items-center justify-center transition cursor-pointer" aria-label="Xir">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Letter Content -->
+            <div class="space-y-4 text-rose-950 leading-relaxed text-sm sm:text-base">
+                <p class="font-serif-romantic italic text-lg text-rose-700">Gacaliyahayga qaaliga ah,</p>
+                <p>
+                    Tan iyo maalintii aad nolosheyda soo gashay, wax kasta way isbeddeleen. Waxaad ii noqotay wehelka riyadayda, farxadda qalbigayga, iyo sababta aan subax kasta ugu soo tooso dhoolla-caddayn.
+                </p>
+                <p>
+                    Mararka qaar erayadu kuma filna inay cabbiraan inta aan ku jeclahay, laakiin waxaan rabaa inaad ogaato inaad tahay hibo qaali ah oo Eebbe i siiyay. Meel kasta oo aan joogo iyo xaalad kasta oo aan ku suganahay, adiga ayaa ah qofka koowaad ee maskaxdayda ku soo dhaca.
+                </p>
+                <p>
+                    Mahadsanid sida aad ii fahamto, ii dhiirrigeliso, iiguna jeclaato sida aan ahay. Waxaan sugayaa maalmaha quruxda badan ee inoo soo socda.
+                </p>
+                <div class="pt-4 border-t border-rose-100 flex flex-col items-end">
+                    <p class="font-serif-romantic italic text-rose-700">Weligaa ku jecel,</p>
+                    <p class="font-serif-romantic font-bold text-lg text-rose-950 mt-0.5">Qofkaaga Kuu Qaaliga Ah ❤️</p>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button onclick="closeLoveLetter()" class="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-rose-600 text-white font-medium shadow-md hover:from-rose-600 hover:to-rose-700 transition cursor-pointer">
+                    Qalbiga Ayaan Ku Kaydiyay 💖
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. GENTLE SOUND EFFECTS (Tone.js)
+        // ==========================================
+        let synth = null;
+        function playRomanticChime(notes = ["C5", "E5", "G5", "B5"]) {
+            try {
+                if (typeof Tone !== 'undefined') {
+                    if (Tone.context.state !== 'running') {
+                        Tone.start();
+                    }
+                    if (!synth) {
+                        synth = new Tone.PolySynth(Tone.Synth, {
+                            oscillator: { type: "sine" },
+                            envelope: { attack: 0.05, decay: 0.3, sustain: 0.2, release: 1.2 }
+                        }).toDestination();
+                        synth.volume.value = -12;
+                    }
+                    const now = Tone.now();
+                    notes.forEach((note, index) => {
+                        synth.triggerAttackRelease(note, "8n", now + index * 0.12);
+                    });
+                }
+            } catch (e) {
+                // Fail silently if audio is blocked
+            }
+        }
+
+        // ==========================================
+        // 2. FLOATING HEARTS & ROSE PETALS
+        // ==========================================
+        const floatingContainer = document.getElementById('floating-container');
+        const symbols = ['❤️', '💖', '🌹', '✨', '🌸', '💕'];
+
+        function createFloatingSymbol() {
+            const el = document.createElement('div');
+            el.className = 'floating-element';
+            el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            
+            const startLeft = Math.random() * 100;
+            const size = Math.random() * 16 + 14; // 14px to 30px
+            const duration = Math.random() * 6 + 7; // 7s to 13s
+
+            el.style.left = `${startLeft}vw`;
+            el.style.fontSize = `${size}px`;
+            el.style.animationDuration = `${duration}s`;
+
+            floatingContainer.appendChild(el);
+
+            setTimeout(() => {
+                el.remove();
+            }, duration * 1000);
+        }
+
+        // Spawn gentle floating elements periodically
+        setInterval(createFloatingSymbol, 900);
+        for (let i = 0; i < 6; i++) {
+            setTimeout(createFloatingSymbol, i * 300);
+        }
+
+        // ==========================================
+        // 3. INTERACTIVE LOVE LETTER ENVELOPE
+        // ==========================================
+        const envelopeBox = document.getElementById('envelopeBox');
+        const letterModal = document.getElementById('letterModal');
+
+        function openLoveLetter() {
+            envelopeBox.classList.add('open');
+            playRomanticChime(["E5", "G#5", "B5"]);
+            setTimeout(() => {
+                letterModal.classList.remove('hidden');
+                letterModal.classList.add('flex');
+            }, 400);
+        }
+
+        function closeLoveLetter() {
+            letterModal.classList.add('hidden');
+            letterModal.classList.remove('flex');
+            setTimeout(() => {
+                envelopeBox.classList.remove('open');
+            }, 300);
+        }
+
+        // Close modal when clicking outside the letter box
+        letterModal.addEventListener('click', (e) => {
+            if (e.target === letterModal) {
+                closeLoveLetter();
+            }
+        });
+
+        // ==========================================
+        // 4. REASONS WHY I LOVE YOU GENERATOR
+        // ==========================================
+        const reasons = [
+            {
+                icon: "🌹",
+                text: "Dhoolla-caddayntaadu waxay ii iftiimisaa maalinta ugu madow, waxayna qalbigayga gelisaa xasillooni aan la soo koobi karin."
+            },
+            {
+                icon: "✨",
+                text: "Sida naxariista leh ee aad ii dhageysato mar kasta oo aan hadlayo waxay i dareensiisaa inaan ahay qofka ugu muhiimsan dunida."
+            },
+            {
+                icon: "💖",
+                text: "Codkaaga oo keliya markaan maqlo, waxaa iga baaba'a daalka iyo welwelka maalinta oo dhan."
+            },
+            {
+                icon: "🌟",
+                text: "Waxaad i baraysaa maalin kasta sida loo noqdo qof wanaagsan, adigoo igu dhiirrigeliya riyooyinkayga."
+            },
+            {
+                icon: "🦋",
+                text: "Xusuus kasta oo aan wadaagno waxay ii tahay sheeko aan jeclahay inaan dib u xasuusto marar badan."
+            },
+            {
+                icon: "☀️",
+                text: "Qalbigaaga nadiifka ah iyo daacadnimadaadu waa waxa ugu quruxda badan ee aan weligay arkay."
+            },
+            {
+                icon: "🎶",
+                text: "Qosolkaagu waa muusigga ugu macaan ee dhegahaygu ku raaxaystaan."
+            },
+            {
+                icon: "🤝",
+                text: "Waxaan ku kalsoonahay inaan dhibaato kasta ka gudbi karno inta aan gacmaha is haysanno."
+            },
+            {
+                icon: "🌷",
+                text: "Xitaa daqiiqadaha aamusan ee aan wada joogno waxay ka qiimo badan yihiin saacado badan oo meel kale lagu qaato."
+            },
+            {
+                icon: "👑",
+                text: "Sababtoo ah adigu waxaad tahay adiga — mana jiro qof kale oo buuxin kara booskaaga qalbigayga."
+            }
+        ];
+
+        let currentReasonIndex = 0;
+        const reasonTextEl = document.getElementById('reasonText');
+        const reasonIconEl = document.getElementById('reasonIcon');
+        const reasonCounterEl = document.getElementById('reasonCounter');
+
+        function nextReason() {
+            currentReasonIndex = (currentReasonIndex + 1) % reasons.length;
+            const item = reasons[currentReasonIndex];
+
+            // Retrigger animation
+            reasonTextEl.classList.remove('reason-fade');
+            void reasonTextEl.offsetWidth; // trigger reflow
+            reasonTextEl.classList.add('reason-fade');
+
+            reasonIconEl.textContent = item.icon;
+            reasonTextEl.textContent = `"${item.text}"`;
+            reasonCounterEl.textContent = `${currentReasonIndex + 1} / ${reasons.length}`;
+
+            playRomanticChime(["G5", "B5"]);
+        }
+
+        // ==========================================
+        // 5. PLAYFUL DODGING 'MAYA' BUTTON & 'HAA' CELEBRATION
+        // ==========================================
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        const celebrationMessage = document.getElementById('celebrationMessage');
+        const questionPrompt = document.getElementById('questionPrompt');
+
+        const playfulNoTexts = [
+            "Maya 🙈",
+            "Ma hubtaa? 🥺",
+            "Mar kale ka fiirso! 💕",
+            "Badhankani ma shaqeeyo 😂",
+            "Haa riix fadlan! ❤️",
+            "Waan ka cararayaa! 🏃‍♂️💨"
+        ];
+        let dodgeCount = 0;
+
+        function dodgeNoButton(event) {
+            if (event) event.preventDefault();
+            
+            dodgeCount++;
+            // Make the Yes button slightly larger and more inviting each time
+            const scaleFactor = Math.min(1 + dodgeCount * 0.06, 1.35);
+            yesBtn.style.transform = `scale(${scaleFactor})`;
+
+            // Update playful text on No button
+            noBtn.textContent = playfulNoTexts[dodgeCount % playfulNoTexts.length];
+
+            // Calculate safe random bounds within the container
+            const containerRect = buttonsContainer.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+
+            const maxX = Math.max(containerRect.width - btnRect.width - 16, 20);
+            const maxY = Math.max(containerRect.height - btnRect.height - 10, 20);
+
+            const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
+            const randomY = Math.floor(Math.random() * maxY) - (maxY / 2);
+
+            noBtn.style.position = 'relative';
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        }
+
+        function handleYesClick() {
+            buttonsContainer.classList.add('hidden');
+            questionPrompt.classList.add('hidden');
+            celebrationMessage.classList.remove('hidden');
+            
+            playRomanticChime(["C5", "E5", "G5", "C6"]);
+            triggerCelebrationBurst();
+        }
+
+        // ==========================================
+        // 6. CELEBRATION HEART & GOLD CONFETTI BURST (CANVAS)
+        // ==========================================
+        const canvas = document.getElementById('celebrationCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationFrameId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerCelebrationBurst() {
+            const colors = ['#e11d48', '#fb7185', '#f59e0b', '#fbbf24', '#ec4899', '#fda4af'];
+            const shapes = ['heart', 'circle', 'sparkle'];
+
+            for (let i = 0; i < 95; i++) {
+                particles.push({
+                    x: canvas.width / 2 + (Math.random() - 0.5) * 120,
+                    y: canvas.height / 2 + (Math.random() - 0.5) * 80,
+                    vx: (Math.random() - 0.5) * 14,
+                    vy: (Math.random() - 0.75) * 15,
+                    size: Math.random() * 10 + 6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    shape: shapes[Math.floor(Math.random() * shapes.length)],
+                    rotation: Math.random() * Math.PI * 2,
+                    vRot: (Math.random() - 0.5) * 0.15,
+                    alpha: 1
+                });
+            }
+
+            if (!animationFrameId) {
+                animateParticles();
+            }
+        }
+
+        function drawHeart(ctx, x, y, size, color, alpha) {
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            const topCurveHeight = size * 0.3;
+            ctx.moveTo(x, y + topCurveHeight);
+            ctx.bezierCurveTo(x, y, x - size / 2, y, x - size / 2, y + topCurveHeight);
+            ctx.bezierCurveTo(x - size / 2, y + (size + topCurveHeight) / 2, x, y + (size + topCurveHeight) / 1.4, x, y + size);
+            ctx.bezierCurveTo(x, y + (size + topCurveHeight) / 1.4, x + size / 2, y + (size + topCurveHeight) / 2, x + size / 2, y + topCurveHeight);
+            ctx.bezierCurveTo(x + size / 2, y, x, y, x, y + topCurveHeight);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.28; // gravity
+                p.vx *= 0.98; // air resistance
+                p.rotation += p.vRot;
+                p.alpha -= 0.011;
+
+                if (p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+
+                if (p.shape === 'heart') {
+                    drawHeart(ctx, p.x, p.y, p.size * 1.4, p.color, p.alpha);
+                } else {
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                    ctx.restore();
+                }
+            }
+
+            if (particles.length > 0) {
+                animationFrameId = requestAnimationFrame(animateParticles);
+            } else {
+                animationFrameId = null;
+            }
+        }
+    </script>
+</body>
+</html>
